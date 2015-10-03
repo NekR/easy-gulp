@@ -45,9 +45,9 @@ function make(tasks) {
         depTask.global = false;
         watchGlobs = getWatch(depTask, watchGlobs);
       });
-
-      task.watch = watchGlobs;
     }
+
+    task.watch = watchGlobs;
 
     if (watchGlobs && watchGlobs.length) {
       gulp.task(watchKey, function() {
@@ -56,10 +56,11 @@ function make(tasks) {
           task.clean ? gulp.series(cleanKey, runKey) : gulp.series(runKey)
         );
       });
+
+      task.watchKey = watchKey;
     }
 
     task.runKey = runKey;
-    task.watchKey = watchKey;
   });
 
   Object.keys(tasks).forEach(function(key) {
@@ -67,7 +68,7 @@ function make(tasks) {
 
     if (task.global !== false) {
       runList.push(task.runKey);
-      watchList.push(task.watchKey);
+      task.watchKey && watchList.push(task.watchKey);
     }
   });
 
